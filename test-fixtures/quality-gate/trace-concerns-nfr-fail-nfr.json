@@ -1,0 +1,40 @@
+{
+  "$artifact": "nfr-gate-decision.json",
+  "$producer": "bmad-testarch-nfr",
+  "epic": "3",
+  "epic_title": "Inbound rate limiting + onboarding hardening",
+  "runId": "20260525T120000Z",
+  "evaluated_at": "2026-05-25T13:52:18Z",
+  "gate_status": "FAIL",
+  "evidence_summary": {
+    "performance": {
+      "status": "FAIL",
+      "metric": "rate-limiter p99 latency",
+      "budget_ms": 80,
+      "measured_ms": 142,
+      "evidence_file": "_bmad-output/implementation-artifacts/epic-3-perf-bench.json",
+      "note": "p99 measured under burst load (5xRPS for 60s). Budget violated by 77.5%."
+    },
+    "security": {
+      "status": "PASS",
+      "scans_completed": ["semgrep", "npm-audit"],
+      "findings_critical": 0,
+      "findings_high": 0
+    },
+    "reliability": {
+      "status": "CONCERNS",
+      "evidence": "burst-load benchmark held under 5xRPS but request queue depth grew unboundedly past the 80ms latency point — no observed 5xx, but tail behaviour is unverified"
+    },
+    "maintainability": {
+      "status": "PASS",
+      "evidence": "no public-API drift vs tracer architecture"
+    }
+  },
+  "blockers": [
+    "Performance budget violated: rate-limiter p99 latency 142ms exceeds 80ms budget under burst load (1.78x over)."
+  ],
+  "recommendations": [
+    "BLOCK merge. Investigate rate-limiter p99 regression — likely candidates: lock contention on the per-tenant counter, or Redis round-trip count.",
+    "Re-baseline reliability under the corrected perf profile once p99 returns within budget."
+  ]
+}

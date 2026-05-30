@@ -1,0 +1,66 @@
+{
+  "$artifact": "gate-decision.json",
+  "$producer": "bmad-testarch-trace",
+  "epic": "3",
+  "epic_title": "Inbound rate limiting + onboarding hardening",
+  "runId": "20260525T122500Z",
+  "evaluated_at": "2026-05-25T14:08:33Z",
+  "decision_mode": "deterministic",
+  "gate_status": "CONCERNS",
+  "coverage_statistics": {
+    "total_requirements": 17,
+    "fully_covered": 14,
+    "partially_covered": 3,
+    "uncovered": 0,
+    "overall_coverage_pct": 88.2,
+    "priority_breakdown": {
+      "p0": { "total": 6, "fully_covered": 6 },
+      "p1": { "total": 8, "fully_covered": 5, "partially_covered": 3 },
+      "p2": { "total": 3, "fully_covered": 3 }
+    },
+    "by_level": {
+      "e2e": 6,
+      "integration": 5,
+      "unit": 6
+    }
+  },
+  "gap_analysis": {
+    "critical_gaps": [],
+    "high_gaps": [
+      {
+        "requirement": "3-3 AC-5",
+        "summary": "onboarding form: tier-aware validation edge cases (free → premium upgrade-in-progress) covered only by unit test, not integration",
+        "priority": "p1"
+      }
+    ],
+    "medium_gaps": [
+      {
+        "requirement": "3-2 AC-4",
+        "summary": "rate-limiter: per-tenant quota reset at month boundary asserted indirectly via aggregate counter, no dedicated test"
+      },
+      {
+        "requirement": "3-2 AC-7",
+        "summary": "rate-limiter: 429 response shape (retry-after header) covered only by snapshot, no behavioural assertion"
+      }
+    ],
+    "low_gaps": []
+  },
+  "gate_criteria": {
+    "p0_coverage_required": 100.0,
+    "p0_coverage_actual": 100.0,
+    "p0_coverage_status": "PASS",
+    "p1_coverage_target": 90.0,
+    "p1_coverage_minimum": 80.0,
+    "p1_coverage_actual": 62.5,
+    "p1_coverage_status": "CONCERNS",
+    "overall_coverage_minimum": 75.0,
+    "overall_coverage_actual": 88.2,
+    "overall_coverage_status": "PASS"
+  },
+  "blockers": [],
+  "recommendations": [
+    "Add an integration test for 3-3 AC-5 (tier-aware validation under upgrade-in-progress) before next merge.",
+    "Promote the 3-2 AC-4 month-boundary case from indirect aggregate assertion to a dedicated test.",
+    "Replace the snapshot in 3-2 AC-7 with a behavioural assertion over the retry-after header value."
+  ]
+}

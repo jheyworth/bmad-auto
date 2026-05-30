@@ -1,0 +1,94 @@
+$ npm test -- src/utils/__tests__/slugify.test.ts
+
+> content-pipeline@0.7.0 test
+> vitest run src/utils/__tests__/slugify.test.ts
+
+
+ RUN  v1.6.0 /Users/operator/projects/content-pipeline
+
+ ❯ src/utils/__tests__/slugify.test.ts (5)
+   ❯ slugify (5)
+     ✓ slugify_plain_ascii_lowercases_and_hyphenates 2ms
+     ✓ slugify_unicode_strips_diacritics_via_nfkd 4ms
+     × slugify_truncates_at_word_boundary_under_64_chars 6ms
+     ✓ slugify_collapses_punctuation_and_strips_edges 2ms
+     × slugify_appends_collision_suffix_preserving_length_cap 5ms
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/utils/__tests__/slugify.test.ts > slugify > slugify_truncates_at_word_boundary_under_64_chars
+AssertionError: expected 'this-is-a-very-long-title-that-clearly-' to satisfy `long.startsWith(out)`
+
+  AssertionError: expected true to be true // Object.is equality
+  - Expected
+  + Received
+
+  - true
+  + false
+
+ ❯ src/utils/__tests__/slugify.test.ts:18:35
+     16|     expect(out.length).toBeLessThanOrEqual(64);
+     17|     expect(out.endsWith('-')).toBe(false);
+     18|     expect(long.startsWith(out)).toBe(true);
+       |                                   ^
+     19|   });
+
+  Hint: slugify produced 'this-is-a-very-long-title-that-clearly-' (39 chars).
+        Input begins 'this-is-a-very-long-title-that-clearly-exceeds-…'.
+        Output does NOT prefix the input — implementation appears to be
+        slicing at 39 chars then trimming a trailing '-', but the next
+        word ("exceeds") was lost. Test expects truncation to a clean
+        hyphen boundary that the input still starts with.
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/utils/__tests__/slugify.test.ts > slugify > slugify_appends_collision_suffix_preserving_length_cap
+AssertionError: expected 'this-is-a-very-long-title-that-clearly-exceeds-the-sixty-four-c-3'.length to be less than or equal to 64
+
+  AssertionError: expected 65 to be less than or equal to 64
+
+ ❯ src/utils/__tests__/slugify.test.ts:31:24
+     29|     const out = slugify(base, { collisionSuffix: 3 });
+     30|     expect(out.endsWith('-3')).toBe(true);
+     31|     expect(out.length).toBeLessThanOrEqual(64);
+       |                        ^
+     32|   });
+
+  Hint: slugify produced a 65-char output. The collision suffix '-3' was
+        appended AFTER the 64-char truncation rather than being reserved
+        from the budget. Implementation should truncate to (64 - suffix.length)
+        before appending the suffix.
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed (5)
+   Start at  15:08:44
+   Duration  402ms (transform 39ms, setup 0ms, collect 21ms, tests 17ms, environment 5ms, prepare 70ms)
+
+ ELIFECYCLE  Test failed. See above for more details.
+
+# bmad-quick-dev exit summary (story 7-2-slugify-utility)
+#
+# Implementation files on disk:
+#   - src/utils/slugify.ts        (created, 38 lines)
+#   - src/utils/__tests__/slugify.test.ts (from ATDD scaffold, unchanged)
+#
+# Iteration log (5 of 5 budgeted):
+#   1. Created slugify.ts with lowercase + hyphenate            → 1/5 green
+#   2. Added NFKD normalize + diacritic strip                   → 2/5 green
+#   3. Added punctuation collapse + edge trim                   → 3/5 green
+#   4. First truncation attempt (slice at 64)                   → 3/5 green
+#                                                                 (boundary regression)
+#   5. Second truncation attempt + collision suffix append      → 3/5 green
+#                                                                 (suffix overruns cap)
+#
+# Quick-dev's RGR loop exhausted its 5-iteration budget without driving
+# the ATDD-authored red tests fully green. AC-3 (word-boundary truncation)
+# and AC-5 (collision suffix budget reservation) remain red.
+#
+# Per the tests-first commitment (v4 architectural non-negotiable #8),
+# the story cannot be marked done while red tests still failing remain.
+# Sprint-status NOT advanced to done.
+#
+# Status: HALTED. red tests still failing — tests not green at quick-dev exit.

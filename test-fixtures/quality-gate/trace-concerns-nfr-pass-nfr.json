@@ -1,0 +1,33 @@
+{
+  "$artifact": "nfr-gate-decision.json",
+  "$producer": "bmad-testarch-nfr",
+  "epic": "3",
+  "epic_title": "Inbound rate limiting + onboarding hardening",
+  "runId": "20260525T122500Z",
+  "evaluated_at": "2026-05-25T14:09:51Z",
+  "gate_status": "PASS",
+  "evidence_summary": {
+    "performance": {
+      "status": "PASS",
+      "metric": "rate-limiter p99 latency",
+      "budget_ms": 80,
+      "measured_ms": 47
+    },
+    "security": {
+      "status": "PASS",
+      "scans_completed": ["semgrep", "npm-audit"],
+      "findings_critical": 0,
+      "findings_high": 0
+    },
+    "reliability": {
+      "status": "PASS",
+      "evidence": "burst-load benchmark sustained 5xRPS for 10 minutes with zero 5xx"
+    },
+    "maintainability": {
+      "status": "PASS",
+      "evidence": "no public-API drift vs tracer architecture"
+    }
+  },
+  "blockers": [],
+  "recommendations": []
+}

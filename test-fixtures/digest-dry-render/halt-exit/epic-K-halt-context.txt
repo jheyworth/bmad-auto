@@ -1,0 +1,14 @@
+  ISSUE: AC-3 says "burst window is 60 seconds" but the architecture
+  document specifies the burst window MUST be derived from tenant tier
+  (free=60s, paid=10s). Story spec does not reference tenant tier.
+
+  intent_gap: the story's AC-3 contradicts the tiered-window pattern
+  established in epic-3-micro-architecture.md § "Burst windows by tier".
+  Autonomous mode cannot reconcile this.
+
+Per autonomous-mode directive #3 (intent-gap surfaces HALT, never
+guesses), surfacing and stopping.
+
+  Story: 3-3-burst-window-tiering
+  Reason: intent_gap (AC-3 contradicts tiered-window pattern)
+Status: HALTED.

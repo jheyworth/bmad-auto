@@ -1,0 +1,20 @@
+$ npm test -- src/utils/__tests__/slugify.test.ts
+
+> content-pipeline@0.7.0 test
+> vitest run src/utils/__tests__/slugify.test.ts
+
+
+ RUN  v1.6.0 /Users/operator/projects/content-pipeline
+
+ ✓ src/utils/__tests__/slugify.test.ts (5) 14ms
+   ✓ slugify (5) 14ms
+     ✓ slugify_plain_ascii_lowercases_and_hyphenates 2ms
+     ✓ slugify_unicode_strips_diacritics_via_nfkd 4ms
+     ✓ slugify_truncates_at_word_boundary_under_64_chars 3ms
+     ✓ slugify_collapses_punctuation_and_strips_edges 2ms
+     ✓ slugify_appends_collision_suffix_preserving_length_cap 3ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  14:51:18
+   Duration  389ms (transform 41ms, setup 0ms, collect 22ms, tests 14ms, environment 5ms, prepare 68ms)

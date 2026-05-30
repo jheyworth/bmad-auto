@@ -1,0 +1,85 @@
+> /goal Story 7-2 of epic 7 has status: ready-for-dev in sprint-status.yaml.
+> Execute via bmad-testarch-atdd (red-phase scaffolds) THEN bmad-quick-dev
+> (implementation makes red green) THEN bmad-testarch-automate THEN
+> bmad-code-review.
+>
+> Autonomous-mode directives:
+>
+> 1. CHECKPOINT 1 — default [A] Approve. Quick-dev's Step 2 spec-approval
+>    gate auto-approves unless the spec is obviously broken.
+> 2. Scope-split — default [K] Keep all goals.
+> 3. intent_gap loopback — DO NOT auto-resolve. HALT and surface. When
+>    quick-dev's intent-gap reviewer flags a divergence between ACs and
+>    the implementation, stop and surface.
+> 4. VCS dirty / wrong branch — DO NOT auto-resolve. HALT and surface.
+> 5. >5 loopbacks on one story — HALT and escalate. Five rounds is the
+>    empirical ceiling.
+> 6. Re-read architecture at start of every story.
+> 7. Do not touch stories outside scope.
+>
+> Story file path: stories/7-2-add-cache-layer.md
+> Architecture: _bmad-output/implementation-artifacts/epic-7-micro-architecture.md
+>
+> When you complete the flow (or HALT), print the literal line
+> STORY_7-2_DONE on a line by itself, and update sprint-status.yaml
+> to done.
+>
+> Mark sprint-status.yaml story key to `done` only when:
+>   - ATDD red tests authored
+>   - bmad-quick-dev makes them green
+>   - code-review passes
+>
+> If tests are still red after quick-dev exits, do NOT mark done.
+> If the spec is internally inconsistent, surface bad_spec and HALT.
+
+Acknowledged. Beginning story 7-2 of epic 7.
+
+Step 1 — Re-reading architecture at story start (per directive 6).
+  Reading _bmad-output/implementation-artifacts/epic-7-micro-architecture.md.
+  Module boundary: src/cache/ (new). Pattern: write-through with TTL.
+
+Step 2 — bmad-testarch-atdd: authoring red-phase scaffolds.
+  ACs from story file:
+    AC-1: GET /api/items/:id hits cache on second call.
+    AC-2: Cache TTL is 60s; entries evict after.
+    AC-3: Cache miss falls through to origin.
+    AC-Ops: Cache hit rate metric exposed at /metrics.
+  Authored 4 red tests in src/cache/__tests__/cache.test.ts.
+
+  Running tests (expect red):
+    > npm test -- --testPathPattern=cache
+    FAIL  src/cache/__tests__/cache.test.ts
+      ● Cannot find module 'src/cache/store' from cache.test.ts
+    4 tests fail (as designed).
+
+Step 3 — bmad-quick-dev: making red green.
+  Implementing src/cache/store.ts:
+    - Map-backed store with Date.now() TTL check.
+    - put(key, value, ttlMs) / get(key) / evictExpired().
+  Wiring into src/api/items/route.ts.
+  Adding /metrics/cache.hitRate counter.
+
+  Iteration 1:
+    > npm test -- --testPathPattern=cache
+    PASS  src/cache/__tests__/cache.test.ts (3 passed, 1 failed)
+    AC-Ops test fails — /metrics endpoint not registered.
+
+  Iteration 2: registering /metrics route.
+    > npm test -- --testPathPattern=cache
+    PASS  src/cache/__tests__/cache.test.ts (4 passed)
+  All 4 tests green.
+
+Step 4 — bmad-code-review.
+  Blind Hunter: 0 findings.
+  Edge Case Hunter: 1 finding — concurrent puts on same key could
+    race. Patch: small mutex via Promise chain. Re-tested: 5 tests
+    (added concurrency test); all pass.
+  Acceptance Auditor: 0 findings.
+
+  Iteration count: 2. Well under loopback budget.
+
+Step 5 — Updating sprint-status.yaml: 7-2 → done. last_updated bumped.
+
+STORY_7-2_DONE
+
+Status: done.

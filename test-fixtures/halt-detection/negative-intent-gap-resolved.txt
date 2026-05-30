@@ -1,0 +1,46 @@
+> /bmad-quick-dev story 5-3 (resumed)
+
+Story spec: _bmad-output/implementation-artifacts/5-3-tenant-quota-api.md
+Status: in-progress (resuming from operator-corrected spec).
+Autonomous-mode directives loaded (7).
+
+Step 0 — Resume context
+  Previous attempt on this story halted in iteration 1 with reason
+  `intent_gap` (the spec under-specified what HTTP status to return on
+  quota exhaustion: 429 vs 503). The operator amended the spec on
+  2026-05-24 to explicitly require 429 with a Retry-After header.
+  The intent_gap is now resolved — the amendment closed the gap, and
+  the orchestrator's prior halt reason no longer applies on this
+  resumption.
+
+  Resumption is safe: the prior iteration wrote no code (HALT
+  surfaced before Step 3), so there is no dirty diff to reconcile.
+
+Step 1 — Preflight: VCS clean, branch ok (epic-5-auto-dev),
+  no in-flight specs.
+
+Step 2 — Intent reconciliation
+  Re-checking the previously-flagged contradiction...
+    AC-2 (amended): "On quota exhaustion, return HTTP 429 with
+      Retry-After header set to seconds-until-window-reset."
+    Architecture doc § "Quota exhaustion response": "Use 429 with
+      Retry-After per RFC 6585 § 4."
+  These now align. The prior contradiction has been resolved.
+
+  All other ACs cross-checked against architecture: ok.
+
+  No new ambiguity surfaced. Intent reconciliation passes.
+
+Step 3 — Implementation
+  Sketching changes to src/quota/check.ts...
+  Applying patch...
+  Running tests: 12 passed, 0 failed.
+
+Step 4 — Adversarial review
+  Blind Hunter: 1 finding (unnecessary string allocation in hot path).
+  Edge Case Hunter: 0 findings.
+  Applied Blind Hunter patch. Re-tested: 12 passed.
+
+Step 5 — Marking story status: done.
+
+Status: done. sprint-status.yaml updated.

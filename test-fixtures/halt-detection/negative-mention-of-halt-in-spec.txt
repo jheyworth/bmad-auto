@@ -1,0 +1,40 @@
+> /bmad-quick-dev story 4-2
+
+Story spec: _bmad-output/implementation-artifacts/4-2-monitor-loop-docs.md
+Status: ready-for-dev. ACs: 2 functional, 1 documentation.
+
+Reading the spec content to internalize the work...
+
+  Story 4-2 is a documentation-only story. It updates SKILL.md's prose
+  describing the monitor loop's HALT detection behavior. Specifically:
+  - AC-1: Document the substring set the monitor loop checks for
+    (intent_gap, VCS dirty, wrong branch, >5 loopbacks, literal HALT
+    on a line by itself).
+  - AC-2: Document the "conservative wins" posture — when in doubt
+    about whether a capture-pane string is a HALT, treat it as one.
+    The directive halt behavior is intentionally over-eager because
+    false-positive HALTs are recoverable (operator inspects and
+    re-runs) while missed HALTs corrupt the run silently.
+  - AC-3: Document that the HALT phrase "wrong branch" must not
+    match casual references to "branch" elsewhere in the story spec.
+
+  Implementation plan: edit docs/skill-prose/monitor-loop.md (the
+  SKILL.md fragment for stage 5.2.9) to add a "Why HALT detection is
+  conservative" subsection. No code changes, no tests.
+
+Step 1 — Preflight: VCS clean (no source changes pending), branch ok
+  (epic-4-auto-dev), no in-flight specs except this story.
+
+Step 2 — Intent reconciliation: spec is unambiguous; this is a prose
+  documentation task. Loopback risk is low because the AC verifier is
+  the operator reading the rendered prose, not an automated check.
+
+Step 3 — Implementation: applying the documented prose...
+  (edits to docs/skill-prose/monitor-loop.md follow)
+
+Step 4 — Adversarial review (Blind Hunter): no findings on prose.
+Step 4 — Adversarial review (Edge Case Hunter): suggests adding a
+  sentence about why "loopback ceiling" is a phrase the matcher
+  checks for — added.
+
+Status: implementation in progress, no blockers.

@@ -1,0 +1,41 @@
+# Hand-crafted sprint-status.yaml for digest dry-render natural-exit-v4
+# scenario. K = 3 in this fixture. Epic 3 has 3 stories (K-1 tracer +
+# K-2 + K-3) all done. Epic 4 is the next backlog epic.
+
+sprint:
+  id: validate-sprint-1
+  title: bmad-auto validate sprint
+
+epics:
+  3:
+    title: "Inbound rate limiting + onboarding hardening"
+  4:
+    title: "Webhook receiver + idempotency cache"
+  5:
+    title: "Reporting dashboard parity"
+
+development_status:
+  3-1-tracer:
+    title: "Tracer: end-to-end rate-limit path"
+    status: done
+  3-2-add-rate-limiter:
+    title: "Per-tenant quota enforcement at the inbound edge"
+    status: done
+  3-3-tenant-onboarding-form:
+    title: "Tenant onboarding form (tier-aware)"
+    status: done
+  4-1-tracer:
+    title: "Tracer: payments-webhook end-to-end"
+    status: ready-for-dev
+  4-2-webhook-handler:
+    title: "Webhook handler (at-least-once)"
+    status: ready-for-dev
+  4-3-idempotency-cache:
+    title: "Redis-backed idempotency replay-cache"
+    status: ready-for-dev
+  5-1-tracer:
+    title: "Tracer: reporting dashboard skeleton"
+    status: ready-for-dev
+  5-2-aggregations:
+    title: "Aggregations and rollups"
+    status: ready-for-dev

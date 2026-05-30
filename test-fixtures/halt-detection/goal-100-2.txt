@@ -1,0 +1,51 @@
+/goal Story 100-2 of epic 100 has status: ready-for-dev in sprint-status.yaml.
+Execute via bmad-testarch-atdd (red-phase scaffolds) THEN bmad-quick-dev
+(implementation makes red green) THEN bmad-testarch-automate (or
+bmad-qa-generate-e2e-tests for coverage expansion, non-blocking) THEN
+bmad-code-review.
+
+Autonomous-mode directives:
+
+# Autonomous-mode directives
+
+These directives are the runtime defaults that `bmad-quick-dev` applies when it is invoked autonomously by `bmad-auto`'s dev mode. They live in a file — not in `bmad-auto`'s long-lived workflow text and not in operator memory — because they are pasted **verbatim** into every per-story `/goal` condition string at compose time, and the per-story `/goal` session is the only context that can be trusted to carry them faithfully. Auto-compaction in the orchestrator session is treated as the enemy by design (see [docs/auto-skills-design.md]({project-root}/docs/auto-skills-design.md) § "The load-bearing principle"); a directive list that lives only in compacted orchestrator memory would erode silently over the course of an epic. Pasting the file's contents into each fresh per-story `/goal` condition is the compaction-resilience non-negotiable.
+
+## Directives
+
+Each directive is a behavioural rule that `bmad-quick-dev` is required to honour when its `/goal` condition embeds this file's contents. The orchestrator should not paraphrase, summarise, or reorder these — paste them verbatim.
+
+1. **CHECKPOINT 1 — default `[A] Approve`.** Quick-dev's Step 2 spec-approval gate auto-approves unless the spec is **obviously broken**. Obviously broken means: missing one of the required spec sections (Intent, Boundaries & Constraints, I/O & Edge-Case Matrix, Code Map, Tasks & Acceptance, Verification), acceptance criteria that directly contradict each other or the stated Intent, or scope that is clearly outside the named story (e.g. references an epic that isn't K). Anything else is judgment-call material and gets `[A]`. Rationale: in autonomous mode no operator is available to type `[A]`, but blanket-approving structurally broken specs corrupts the run — judgement still applies, the default is just inverted.
+
+2. **Scope-split — default `[K] Keep all goals`.** Quick-dev's Step 1 scope decision keeps all goals together by default. If quick-dev still decides to split (it has stronger signal than `bmad-auto` here), accept its decision; do not volunteer a split. Rationale: splitting a story requires operator input we don't have, and "keep all goals" preserves the surface the story was authored against.
+
+3. **`intent_gap` loopback — DO NOT auto-resolve. HALT and surface.** When quick-dev's intent-gap reviewer flags a divergence between acceptance criteria and the implementation, stop and surface to the orchestrator (which will surface to the operator). Rationale: an `intent_gap` is almost always a real design ambiguity that the operator must resolve; an auto-resolution would silently choose a side.
+
+4. **VCS dirty / wrong branch — DO NOT auto-resolve. HALT and surface.** If quick-dev encounters uncommitted changes, a branch it doesn't expect, or any other VCS-state anomaly mid-run, stop and surface. Quick-dev must never autonomously clean up uncommitted work. Rationale: `bmad-auto`'s preflight already cleared VCS state at run start; any anomaly mid-run means another process touched the tree, and auto-cleanup would destroy real work.
+
+5. **`>5 loopbacks on one story` — HALT and escalate.** Five rounds of the implement/review loopback cycle is the empirical ceiling beyond which loops indicate a stuck spec or a degenerate review condition, not iterative progress. Hard upper bound; no exceptions. Rationale: without a hard ceiling, a pathological loopback can burn arbitrary tokens and time before anyone notices.
+
+6. **Re-read architecture + scope docs at the start of every story.** Quick-dev must re-read the epic's architecture-of-record at the start of every story, and apply the patterns and scope statements therein. Discovery order (use the first that exists): (a) Format A — `_bmad-output/implementation-artifacts/epic-K-micro-architecture.md`; (b) Format A-equivalent (whole-project short-circuit; the realistic default for single-epic projects under unmodified BMAD toolchains) — `_bmad-output/planning-artifacts/architecture.md` plus the whole-project SPEC at `_bmad-output/specs/spec-*/SPEC.md` (or `_bmad-output/planning-artifacts/prds/*/prd.md`). Rationale: per-story sessions are independent contexts; nothing from the previous story carries over, including architectural patterns. Re-reading at story start is the only way conventions stay consistent across the epic.
+
+7. **Do not touch stories outside scope.** Story scope is exactly the single story named in the `/goal` condition. Do not pre-emptively touch downstream stories, prior stories, or stories in other epics. If work apparently belongs to another story, surface it via the deferred-work artifact rather than implementing it. Rationale: per-story isolation depends on each session staying inside its own boundaries; cross-story edits would race against future sessions and break sprint-status's accounting.
+
+8. **HALT sidecar — write structured JSON BEFORE exit on any HALT-class condition.** Before exiting or letting the tmux session close on any HALT-class condition — `intent_gap`, `bad_spec`, loopback overflow (>5 iterations on one story), VCS dirty state, wrong branch, explicit HALT, or red tests still failing post-implementation — write a sidecar file to `_bmad-output/.run-state/quick-dev-halt-<storyId>.json` (where `<storyId>` is the story being worked) with exactly these fields: `status` (one of `intent_gap | bad_spec | loopback_overflow | vcs_dirty | wrong_branch | halt | red_tests_failing`), `reason` (one-paragraph human-readable explanation), `iteration` (current spec-loop iteration as an integer, or `null` if not applicable), `files_affected` (array of paths touched by this story, possibly empty), `timestamp` (UTC ISO 8601, e.g. `2026-05-26T14:30:00Z`), and `storyId` (the story identifier, e.g. `K-3-list-cmd`). The write must complete before the agent exits — the orchestrator polls the sidecar path and capture-pane on the same cycle, so if the file isn't on disk when the session is detected gone, the heuristic grep-on-pane fallback fires instead. Rationale: a deterministic JSON sidecar replaces the brittle capture-pane grep heuristic as the primary HALT signal; grep stays as fallback for older runtimes, race conditions, or any case where this directive isn't honoured.
+
+## How this is used
+
+The orchestrator's Launch step (in `SKILL.md`) reads this file fresh on every iteration of its per-story loop and concatenates the entire contents verbatim into the `/goal` condition string it sends to that story's tmux session. The phrase "Autonomous-mode directives:" in the condition is followed by the contents of this file as-is, not by a `@reference` or a summary. This is intentional — only an inlined verbatim copy survives the spawn boundary into the fresh top-level `claude` process.
+
+If this file is edited, the change takes effect on the next per-story iteration in any running `bmad-auto` invocation (because the file is re-read per iteration). Operators should still avoid editing it mid-run: a directive changing partway through an epic would mean some stories ran under the old rules and some under the new, with no record of which.
+
+storyId for HALT sidecar (per directive 8): 100-2
+HALT sidecar path: /Users/operator/projects/automator/_bmad-output/.run-state/quick-dev-halt-100-2.json
+
+Story file path: /Users/operator/projects/automator/_bmad-output/implementation-artifacts/100-2-validation-sandbox-paths-cmd.md
+Architecture: /Users/operator/projects/automator/_bmad-output/planning-artifacts/architecture.md (Format A-equivalent — whole-project architecture; this project has no per-epic micro-architecture)
+SPEC: /Users/operator/projects/automator/_bmad-output/specs/spec-validation-sandbox-2026-05-25/SPEC.md
+ATDD checklist: bmad-testarch-atdd writes the checklist to its canonical path _bmad-output/test-artifacts/atdd-checklist-<story_key>.md (where <story_key> is the story filename's .md-less stem). Do not attempt to override the output path. Quick-dev should locate it via the glob _bmad-output/test-artifacts/atdd-checklist-100-2-*.md.
+
+Mark sprint-status.yaml story key (100-2-validation-sandbox-paths-cmd) to `done` only when:
+- ATDD red tests authored
+- bmad-quick-dev makes them green AND produces clean implementation
+- code-review passes
+- (optional, non-blocking) coverage-expansion ran

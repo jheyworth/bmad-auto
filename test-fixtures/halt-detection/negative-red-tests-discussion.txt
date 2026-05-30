@@ -1,0 +1,96 @@
+> /bmad-quick-dev story 9-2
+
+Story spec: _bmad-output/implementation-artifacts/9-2-document-rgr-cycle.md
+Status: ready-for-dev. ACs: 2 documentation, 1 example-walkthrough.
+Autonomous-mode directives loaded (7).
+
+Step 0 — ATDD checklist intake
+  Reading atdd-checklist-9-2.md. This is a documentation-only story —
+  the only "tests" authored by bmad-testarch-atdd are 2 doctest-style
+  assertions that the rendered prose contains specific phrases. Red
+  phase: doctests authored, currently failing because the prose
+  hasn't been written.
+
+    > npm test -- --testPathPattern=docs-rgr-walkthrough
+    FAIL  docs/__tests__/rgr-walkthrough.doctest.ts (2 failed)
+      ● expected docs/skill-prose/rgr.md to contain "red-green-refactor"
+      ● expected docs/skill-prose/rgr.md to contain "Confirm tests fail before implementation"
+
+  Both red. Red phase confirmed.
+
+Step 1 — Preflight: VCS clean (no source changes pending), branch ok
+  (epic-9-auto-dev), no in-flight specs.
+
+Step 2 — Intent reconciliation
+  Reading PRD § "Onboarding docs for tests-first discipline".
+  Reading spec content carefully so the prose is faithful to BMAD's
+  actual mechanics.
+
+  Story 9-2 is a documentation walkthrough of the red-green-refactor
+  cycle as practiced by bmad-dev-story and bmad-quick-dev. The prose
+  must explain:
+    - "Write FAILING tests first" — the red phase
+    - "Confirm tests fail before implementation" — the verification
+      that the red phase is genuinely red (otherwise the test does
+      not exercise the AC and the green-phase outcome is meaningless)
+    - "Make tests pass with minimal code" — the green phase
+    - "Improve code structure while keeping tests green" — the
+      refactor phase
+
+  The walkthrough also discusses what happens when red tests still
+  cannot be driven green within the iteration budget — quick-dev
+  HALTs with reason "red tests still failing" rather than marking
+  the story done. This is the tests-first commitment in v4: tests
+  not green means the story is not done, full stop.
+
+  Note: this is methodology prose, not an actual red-tests-failing
+  HALT. Quick-dev is happily writing prose; nothing is failing in
+  this session. The substrings "red tests still failing" and "tests
+  not green" appear ONLY as quoted descriptions of how the HALT
+  trigger works.
+
+Step 3 — Implementation
+  Drafting docs/skill-prose/rgr.md...
+    Section 1: "The red phase — write failing tests first"
+    Section 2: "Verifying red is red — confirm tests fail before
+      implementation. If a freshly-authored test passes before any
+      implementation work, the test does not exercise the AC."
+    Section 3: "The green phase — make tests pass with minimal code"
+    Section 4: "Refactor while green"
+    Section 5: "When red cannot be driven green — quick-dev surfaces
+      red tests still failing and the orchestrator HALTs. This is the
+      tests-first commitment: a story whose ATDD-authored tests are
+      not green is not done."
+
+  Prose drafted. Re-running the doctests:
+
+    > npm test -- --testPathPattern=docs-rgr-walkthrough
+    PASS  docs/__tests__/rgr-walkthrough.doctest.ts (2 passed)
+
+  Both doctests now green. The prose contains the required phrases;
+  the walkthrough is faithful to BMAD's actual RGR mechanics.
+
+Step 4 — Adversarial review
+  Blind Hunter: 0 findings on the prose accuracy.
+  Edge Case Hunter: 1 suggestion — add a sentence clarifying that
+    "tests not green" includes flaky tests (tests that pass
+    intermittently are treated as failing for the purposes of the
+    tests-first gate). Added. Re-tested: 2 passed.
+
+  Iteration count: 2. Well under the loopback budget. No HALT
+  triggers raised — the red-tests-failing trigger does not fire on
+  documentation discussing the trigger; it fires only on real test-
+  runner output showing actual failures at quick-dev exit.
+
+Step 5 — Marking story status: done.
+
+  Story: 9-2-document-rgr-cycle
+  Iterations: 2
+  Final doctest count: 2 passed, 0 failed
+  Diff scope: docs/skill-prose/rgr.md (new, ~80 lines of prose)
+
+Status: done. sprint-status.yaml updated.
+
+Story completed cleanly. The substrings "red tests still failing"
+and "tests not green" appear in the rendered prose as methodology
+descriptions, not as failure conditions on this run.

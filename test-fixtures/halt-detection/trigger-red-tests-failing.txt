@@ -1,0 +1,99 @@
+> /bmad-quick-dev story 4-3
+
+Story spec: _bmad-output/implementation-artifacts/4-3-quota-window-reset.md
+Status: ready-for-dev. ACs: 3 functional, 1 ops.
+Autonomous-mode directives loaded (7).
+
+Step 0 — ATDD checklist intake
+  Reading atdd-checklist-4-3.md (produced by bmad-testarch-atdd before
+  this session). 4 red tests authored, 1 implementation checklist.
+    - src/quota/__tests__/window-reset.test.ts (3 cases — AC-1, AC-2, AC-3)
+    - src/quota/__tests__/window-reset.integration.test.ts (1 case — AC-Ops)
+  Confirming red-phase: running the suite before any implementation work.
+
+    > npm test -- --testPathPattern=window-reset
+    FAIL  src/quota/__tests__/window-reset.test.ts (3 failed)
+    FAIL  src/quota/__tests__/window-reset.integration.test.ts (1 failed)
+
+  All 4 tests fail pre-implementation. Red phase confirmed.
+
+Step 1 — Preflight: VCS clean, branch ok (epic-4-auto-dev),
+  no in-flight specs.
+
+Step 2 — Intent reconciliation
+  PRD § "Quota window reset semantics" and arch § "Sliding window"
+  agree. ACs map cleanly. No intent_gap.
+
+Step 3 — Implementation
+  Drafting src/quota/window.ts (new — sliding-window reset logic)...
+  Drafting src/quota/check.ts (modified — wire new reset path)...
+  Iteration 1: applying initial patch.
+
+    > npm test -- --testPathPattern=window-reset
+    PASS  src/quota/__tests__/window-reset.test.ts (AC-1)
+    FAIL  src/quota/__tests__/window-reset.test.ts (AC-2, AC-3)
+    FAIL  src/quota/__tests__/window-reset.integration.test.ts (AC-Ops)
+
+  3 of 4 still red. Iteration 1 made AC-1 green but the window-boundary
+  case (AC-2) and the burst-into-new-window case (AC-3) still fail; the
+  integration test fails with a clock-skew assertion mismatch.
+
+Step 4 — Adversarial review + patch
+  Blind Hunter: identifies a sign error in the boundary comparison
+    (`<=` vs `<`) and recommends a patch.
+  Edge Case Hunter: identifies that the burst-into-new-window case
+    needs an explicit window-rollover branch.
+  Iteration 2: applying patches.
+
+    > npm test -- --testPathPattern=window-reset
+    PASS  src/quota/__tests__/window-reset.test.ts (AC-1, AC-2)
+    FAIL  src/quota/__tests__/window-reset.test.ts (AC-3)
+    FAIL  src/quota/__tests__/window-reset.integration.test.ts (AC-Ops)
+
+  Iteration 3: patching the rollover branch.
+    > npm test -- --testPathPattern=window-reset
+    PASS  src/quota/__tests__/window-reset.test.ts (AC-1, AC-2)
+    FAIL  src/quota/__tests__/window-reset.test.ts (AC-3)
+    FAIL  src/quota/__tests__/window-reset.integration.test.ts (AC-Ops)
+
+  AC-3 remains red after the rollover patch — the assertion compares
+  the reset timestamp to the start of the *new* window, but the
+  implementation is still reporting the start of the *prior* window.
+  Adversarial review attempted a second patch on this in iteration 4;
+  the patch did not change the test outcome.
+
+  Iteration 4: still red on AC-3 and AC-Ops.
+  Iteration 5: rewrote the rollover branch from scratch using a
+    different approach (epoch-aligned buckets). AC-3 now passes
+    intermittently (passes ~60% of runs, fails on boundary races).
+    AC-Ops still red.
+
+    > npm test -- --testPathPattern=window-reset
+    PASS  src/quota/__tests__/window-reset.test.ts (AC-1, AC-2)
+    FAIL  src/quota/__tests__/window-reset.test.ts (AC-3 — flake, race)
+    FAIL  src/quota/__tests__/window-reset.integration.test.ts (AC-Ops)
+
+  Quick-dev's RGR loop has exhausted its budget for this story without
+  driving the ATDD-authored red tests fully green. Per the tests-first
+  commitment (v4 architectural non-negotiable #8), the story cannot be
+  marked done while red tests still failing remain — a "done" claim
+  against red tests not green would silently break the externally-
+  auditable ATDD contract.
+
+  Story: 4-3-quota-window-reset
+  Reason: red tests still failing after the implementation budget was
+    spent. 2 of 4 ATDD-authored tests remain red (AC-3 flake on race
+    boundary, AC-Ops fails on clock-skew tolerance). tests not green
+    means the architectural tests-first commitment is violated.
+  ATDD checklist (atdd-checklist-4-3.md) is preserved on disk for
+    operator inspection — the failing test names map directly to the
+    checklist items so the root cause is locatable.
+  Next action for operator: inspect window-reset.test.ts AC-3 and
+    window-reset.integration.test.ts AC-Ops, decide whether the
+    implementation needs deeper rework (epoch alignment +
+    clock-tolerance widening) or whether the tests themselves
+    over-constrain the AC. Then either re-run /bmad-quick-dev against
+    a refined spec or amend the ATDD scaffold.
+
+Status: HALTED. red tests still failing — tests not green at quick-dev
+  exit. Sprint-status NOT advanced to done.

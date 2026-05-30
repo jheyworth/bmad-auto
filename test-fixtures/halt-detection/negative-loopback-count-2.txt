@@ -1,0 +1,42 @@
+> /bmad-quick-dev story 7-2
+
+Story spec: _bmad-output/implementation-artifacts/7-2-csv-import-validator.md
+Status: in-progress (iteration 2 of N).
+Autonomous-mode directives loaded (7).
+
+Step 4 — Adversarial review, iteration 2
+  Iteration 1 produced an initial implementation in src/import/csv.ts
+  plus a draft test suite. Adversarial review found 2 issues:
+    - Blind Hunter: trailing-newline handling silently dropped the
+      last row when the file did not end with a newline.
+    - Edge Case Hunter: BOM-prefixed UTF-8 files broke the header
+      parser because the BOM was treated as part of the first column
+      name.
+
+  Iteration 2: applying patches for both findings.
+    - Patch 1: trim-and-detect-empty for the trailing row.
+    - Patch 2: strip leading BOM (U+FEFF) before header parse.
+
+  Re-running tests after iteration 2 patches...
+    > npm test -- --testPathPattern=csv-import
+    PASS  src/import/__tests__/csv.test.ts (12 tests)
+    PASS  src/import/__tests__/csv-edge.test.ts (6 tests)
+
+  All 18 tests pass. Adversarial review iteration 2 — re-checking:
+    - Blind Hunter: 0 new findings.
+    - Edge Case Hunter: 0 new findings.
+
+  Loopback counter for story 7-2: 2 iterations total. Well under the
+  autonomous-mode-directive #4 ceiling of 5. No loopback risk.
+
+Step 5 — Marking story status: done.
+
+  Story: 7-2-csv-import-validator
+  Iterations: 2
+  Final test count: 18 passed, 0 failed
+  Diff scope: src/import/csv.ts (+47 -3), src/import/__tests__/csv.test.ts
+    (new, 12 tests), src/import/__tests__/csv-edge.test.ts (new, 6 tests)
+
+Status: done. sprint-status.yaml updated to status: done.
+
+Story completed cleanly within the loopback budget.

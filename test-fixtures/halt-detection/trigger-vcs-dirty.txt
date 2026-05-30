@@ -1,0 +1,45 @@
+> /bmad-quick-dev story 3-3
+
+Loading story: _bmad-output/implementation-artifacts/3-3-emit-audit-events.md
+Status: ready-for-dev
+Autonomous-mode directives loaded from /goal (7 directives).
+
+Step 1 — Preflight: Version-control sanity check
+  Running: git rev-parse --is-inside-work-tree
+    -> true (repo confirmed)
+
+  Running: git rev-parse --abbrev-ref HEAD
+    -> epic-3-auto-dev
+
+  Running: git status --porcelain
+    -> M  src/audit/emitter.ts
+    -> M  src/audit/types.ts
+    -> ?? src/audit/__tests__/emitter.draft.ts
+
+  VCS dirty: working tree has 3 unstaged paths. Quick-dev refuses to
+  start on a dirty tree because uncommitted changes from a prior run
+  would mix with this story's diff and corrupt the per-story SHA
+  bookkeeping that Launch sub-step 5.2.11.1 relies on for the per-story
+  Codex review boundary.
+
+Per autonomous-mode directive #5 (VCS issues HALT, never auto-resolve),
+surfacing and stopping.
+
+  Story: 3-3-emit-audit-events
+  Reason: VCS dirty (3 modified/untracked paths on branch
+    epic-3-auto-dev)
+  Next action for operator: inspect the changes (`git diff`,
+    `git status`), then either commit, stash, or revert. The orchestrator
+    will NOT auto-stash because the change set may include in-flight
+    operator edits that have not been examined.
+
+Affected paths:
+  - src/audit/emitter.ts (modified)
+  - src/audit/types.ts (modified)
+  - src/audit/__tests__/emitter.draft.ts (untracked)
+
+Status: HALTED.
+
+Note for the orchestrator's monitor loop: this HALT was surfaced before
+any code was written for story 3-3. Re-running after the working tree is
+clean is safe.

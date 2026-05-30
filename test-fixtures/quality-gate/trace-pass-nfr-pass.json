@@ -1,0 +1,47 @@
+{
+  "$artifact": "gate-decision.json",
+  "$producer": "bmad-testarch-trace",
+  "epic": "3",
+  "epic_title": "Inbound rate limiting + onboarding hardening",
+  "runId": "20260525T120000Z",
+  "evaluated_at": "2026-05-25T13:51:04Z",
+  "decision_mode": "deterministic",
+  "gate_status": "PASS",
+  "coverage_statistics": {
+    "total_requirements": 17,
+    "fully_covered": 17,
+    "partially_covered": 0,
+    "uncovered": 0,
+    "overall_coverage_pct": 100.0,
+    "priority_breakdown": {
+      "p0": { "total": 6, "fully_covered": 6 },
+      "p1": { "total": 8, "fully_covered": 8 },
+      "p2": { "total": 3, "fully_covered": 3 }
+    },
+    "by_level": {
+      "e2e": 7,
+      "integration": 6,
+      "unit": 4
+    }
+  },
+  "gap_analysis": {
+    "critical_gaps": [],
+    "high_gaps": [],
+    "medium_gaps": [],
+    "low_gaps": []
+  },
+  "gate_criteria": {
+    "p0_coverage_required": 100.0,
+    "p0_coverage_actual": 100.0,
+    "p0_coverage_status": "PASS",
+    "p1_coverage_target": 90.0,
+    "p1_coverage_minimum": 80.0,
+    "p1_coverage_actual": 100.0,
+    "p1_coverage_status": "PASS",
+    "overall_coverage_minimum": 75.0,
+    "overall_coverage_actual": 100.0,
+    "overall_coverage_status": "PASS"
+  },
+  "blockers": [],
+  "recommendations": []
+}

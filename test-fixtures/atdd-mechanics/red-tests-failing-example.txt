@@ -1,0 +1,42 @@
+$ npm test -- src/utils/__tests__/slugify.test.ts
+
+> content-pipeline@0.7.0 test
+> vitest run src/utils/__tests__/slugify.test.ts
+
+
+ RUN  v1.6.0 /Users/operator/projects/content-pipeline
+
+ ❯ src/utils/__tests__/slugify.test.ts (5)
+   ❯ slugify (5)
+     × slugify_plain_ascii_lowercases_and_hyphenates
+     × slugify_unicode_strips_diacritics_via_nfkd
+     × slugify_truncates_at_word_boundary_under_64_chars
+     × slugify_collapses_punctuation_and_strips_edges
+     × slugify_appends_collision_suffix_preserving_length_cap
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/utils/__tests__/slugify.test.ts > slugify > slugify_plain_ascii_lowercases_and_hyphenates
+ FAIL  src/utils/__tests__/slugify.test.ts > slugify > slugify_unicode_strips_diacritics_via_nfkd
+ FAIL  src/utils/__tests__/slugify.test.ts > slugify > slugify_truncates_at_word_boundary_under_64_chars
+ FAIL  src/utils/__tests__/slugify.test.ts > slugify > slugify_collapses_punctuation_and_strips_edges
+ FAIL  src/utils/__tests__/slugify.test.ts > slugify > slugify_appends_collision_suffix_preserving_length_cap
+Error: Failed to resolve import "../slugify" from "src/utils/__tests__/slugify.test.ts". Does the file exist?
+ ❯ src/utils/__tests__/slugify.test.ts:2:25
+      1| import { describe, expect, it } from 'vitest';
+      2| import { slugify } from '../slugify';
+       |                         ^
+      3|
+      4| describe('slugify', () => {
+
+  Plugin: vite:import-analysis
+  File:   /Users/operator/projects/content-pipeline/src/utils/__tests__/slugify.test.ts:2:25
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  14:33:02
+   Duration  412ms (transform 38ms, setup 0ms, collect 0ms, tests 0ms, environment 6ms, prepare 71ms)
+
+ ELIFECYCLE  Test failed. See above for more details.

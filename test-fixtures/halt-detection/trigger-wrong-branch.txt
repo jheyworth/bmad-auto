@@ -1,0 +1,44 @@
+> /bmad-quick-dev story 3-4
+
+Story spec: _bmad-output/implementation-artifacts/3-4-tenant-scoping.md
+ACs: 5 functional. Status: ready-for-dev.
+Autonomous-mode directives received (7 directives, full text inline).
+
+Step 1 — Preflight: Version-control sanity check
+  git rev-parse --is-inside-work-tree
+    -> true
+
+  git status --porcelain
+    -> (empty — working tree clean)
+
+  git rev-parse --abbrev-ref HEAD
+    -> main
+
+  Branch plausibility check: current branch is `main`. Quick-dev
+  refuses to run against a shared trunk branch — committing autonomous
+  work to `main` would bypass code review and PR gating that the rest of
+  the team relies on.
+
+  Allowlist of refused branches: main, master, develop, trunk, HEAD
+  (detached). Anything else is accepted (feature/..., epic-K-...,
+  sprint-N, operator-named, etc.).
+
+  wrong branch detected: `main` is in the refusal list.
+
+Per autonomous-mode directive #5 (VCS issues HALT), surfacing and
+stopping.
+
+  Story: 3-4-tenant-scoping
+  Reason: wrong branch (current is `main`; auto-dev refuses trunk
+    branches)
+  Next action for operator:
+    git switch -c epic-3-auto-dev
+    # then re-run /bmad-quick-dev against story 3-4
+
+  Note: bmad-auto's Verify Readiness stage (2.B.3 in SKILL.md) should
+  have caught this up front. If you got here from a per-story session
+  rather than a fresh /bmad-auto invocation, it means an earlier story
+  in the loop somehow switched branches mid-run — investigate before
+  retrying.
+
+Status: HALTED.

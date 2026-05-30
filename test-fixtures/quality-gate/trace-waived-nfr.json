@@ -1,0 +1,35 @@
+{
+  "$artifact": "nfr-gate-decision.json",
+  "$producer": "bmad-testarch-nfr",
+  "epic": "3",
+  "epic_title": "Internal admin tool — onboarding scaffold",
+  "runId": "20260525T120000Z",
+  "evaluated_at": "2026-05-25T13:43:02Z",
+  "gate_status": "PASS",
+  "evidence_summary": {
+    "performance": {
+      "status": "PASS",
+      "metric": "admin-action server-side latency p99",
+      "budget_ms": 500,
+      "measured_ms": 178,
+      "note": "Single-tenant internal tool; thresholds set per Stage 1.e test-design output."
+    },
+    "security": {
+      "status": "PASS",
+      "scans_completed": ["semgrep"],
+      "findings_critical": 0,
+      "findings_high": 0,
+      "note": "Internal tool behind SSO; external attack surface minimal."
+    },
+    "reliability": {
+      "status": "PASS",
+      "evidence": "smoke run; expected user volume well within capacity"
+    },
+    "maintainability": {
+      "status": "PASS",
+      "evidence": "scaffold conforms to existing internal-tools module template"
+    }
+  },
+  "blockers": [],
+  "recommendations": []
+}

@@ -1,0 +1,47 @@
+> /bmad-quick-dev story 6-1
+
+Story spec: _bmad-output/implementation-artifacts/6-1-add-feature-flag-system.md
+Status: ready-for-dev. ACs: 4 functional, 1 ops.
+
+Step 1 — Preflight: VCS clean, branch ok (epic-6-auto-dev),
+  no in-flight specs.
+
+Step 2 — Intent reconciliation
+  Reading PRD: "Per-tenant feature flags with progressive rollout."
+  Reading micro-architecture: "Two-branch evaluator pattern — fast path
+    for default-deny tenants, slow path for tenants with overrides."
+
+  The architecture document's "Two-branch evaluator" terminology refers
+  to two code branches inside a single evaluation function, not git
+  branches. The story spec inherits this terminology directly in AC-2:
+    "AC-2: The evaluator MUST use the fast branch (in-memory default
+     map) for tenants whose flag-overrides set is empty, and the slow
+     branch (DB lookup) only when overrides exist."
+
+  Cross-referencing patterns: matches `epic-6-micro-architecture.md`
+  § "Decision tree" — the right branch in the diagram corresponds to
+  the slow path. Naming is consistent across the spec and the arch
+  doc; no intent gap.
+
+Step 3 — Implementation
+  Sketching the two-branch evaluator in src/flags/eval.ts...
+  Note on git branching strategy (this is an aside captured for
+  operator review, not a HALT condition):
+    - Current branch is `epic-6-auto-dev` (passes the auto-dev
+      branch-name plausibility check).
+    - The operator's team uses trunk-based development on `main` for
+      hotfixes; this is fine because auto-dev never targets `main`
+      directly — it merges via PR after end-of-epic Codex review.
+    - The "right branch to land this on" is `epic-6-auto-dev`, which
+      we're already on. No branch switch needed.
+
+  Patch applied. Tests: 9 passed.
+
+Step 4 — Adversarial review
+  Blind Hunter: 0 findings on the two-branch evaluator.
+  Edge Case Hunter: 1 finding (tenant-id of empty string should not
+    crash the fast branch evaluator) — patched, re-tested, ok.
+
+Step 5 — Marking story status: done.
+
+Status: done.

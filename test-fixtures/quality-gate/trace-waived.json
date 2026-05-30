@@ -1,0 +1,66 @@
+{
+  "$artifact": "gate-decision.json",
+  "$producer": "bmad-testarch-trace",
+  "epic": "3",
+  "epic_title": "Internal admin tool — onboarding scaffold",
+  "runId": "20260525T120000Z",
+  "evaluated_at": "2026-05-25T13:42:11Z",
+  "decision_mode": "deterministic",
+  "gate_status": "WAIVED",
+  "waiver": {
+    "author": "justin.heyworth@forgemedialab.com",
+    "recorded_at": "2026-05-25T13:42:11Z",
+    "rationale": "tracer-only coverage acceptable for this internal tool — no external API surface, single-tenant deployment.",
+    "scope_note": "Waiver applies to this epic's traceability gate only. Subsequent epics evaluated independently."
+  },
+  "coverage_statistics": {
+    "total_requirements": 9,
+    "fully_covered": 4,
+    "partially_covered": 0,
+    "uncovered": 5,
+    "overall_coverage_pct": 44.4,
+    "priority_breakdown": {
+      "p0": { "total": 4, "fully_covered": 4 },
+      "p1": { "total": 4, "fully_covered": 0, "uncovered": 4 },
+      "p2": { "total": 1, "fully_covered": 0, "uncovered": 1 }
+    },
+    "by_level": {
+      "e2e": 2,
+      "integration": 1,
+      "unit": 1
+    }
+  },
+  "gap_analysis": {
+    "critical_gaps": [],
+    "high_gaps": [
+      {
+        "requirement": "3-2 AC-1, 3-2 AC-2, 3-3 AC-1, 3-3 AC-2",
+        "summary": "p1 ACs across stories 3-2 and 3-3 covered only by tracer E2E walk-through, not by dedicated tests. Acceptable per the waiver rationale (internal tool, single-tenant)."
+      }
+    ],
+    "medium_gaps": [],
+    "low_gaps": [
+      {
+        "requirement": "3-3 AC-5",
+        "summary": "p2 visual polish — no test coverage. Accepted per waiver."
+      }
+    ]
+  },
+  "gate_criteria": {
+    "p0_coverage_required": 100.0,
+    "p0_coverage_actual": 100.0,
+    "p0_coverage_status": "PASS",
+    "p1_coverage_target": 90.0,
+    "p1_coverage_minimum": 80.0,
+    "p1_coverage_actual": 0.0,
+    "p1_coverage_status": "FAIL",
+    "overall_coverage_minimum": 75.0,
+    "overall_coverage_actual": 44.4,
+    "overall_coverage_status": "FAIL"
+  },
+  "blockers": [],
+  "recommendations": [
+    "Decision-log entry to surface in the digest: trace gate WAIVED by operator on 2026-05-25 — rationale recorded above.",
+    "If this tool ever gains an external API surface or multi-tenant scope, re-evaluate without the waiver."
+  ]
+}

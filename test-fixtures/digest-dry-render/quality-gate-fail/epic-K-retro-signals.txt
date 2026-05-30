@@ -1,0 +1,3 @@
+significant_discoveries=false
+critical_readiness=FAIL
+critical_readiness_reason=Phase 4 quality gates returned BLOCK (Trace=CONCERNS + NFR=FAIL); next-epic entry would compound the perf debt.

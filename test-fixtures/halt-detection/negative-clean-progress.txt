@@ -1,0 +1,52 @@
+> /bmad-quick-dev story 8-2
+
+Story spec: _bmad-output/implementation-artifacts/8-2-add-search-endpoint.md
+Status: ready-for-dev. ACs: 3 functional, 1 ops.
+
+Step 1 — Preflight: VCS clean (branch epic-8-auto-dev, no in-flight
+  specs).
+
+Step 2 — Intent reconciliation
+  Reading PRD § "Tenant search" and architecture § "Read-side query
+  layer". ACs map cleanly:
+    AC-1: GET /tenants/search?q= returns paged JSON results.
+    AC-2: Search uses the read-only replica (per architecture).
+    AC-3: Empty query returns 400 with structured error envelope.
+    AC-Ops: p99 latency under 80ms at 100 RPS.
+
+  No contradictions. No under-specified ACs. Architecture and spec
+  agree on patterns.
+
+Step 3 — Implementation
+  Files to touch (per architecture's module boundaries):
+    - src/search/route.ts (new — endpoint handler)
+    - src/search/query.ts (new — query composer)
+    - src/search/__tests__/route.test.ts (new — unit + integration)
+
+  Drafting src/search/query.ts...
+  Drafting src/search/route.ts...
+  Drafting tests...
+
+  Running tests:
+    > npm test -- --testPathPattern=search
+    PASS  src/search/__tests__/route.test.ts (8 tests)
+
+  All 8 tests pass.
+
+Step 4 — Adversarial review
+  Blind Hunter: 1 finding — search query is not URL-decoded before
+    being passed to the query composer; multi-word queries containing
+    `%20` would fail. Applied patch: decodeURIComponent at the route
+    boundary. Re-tested: 9 tests (added a multi-word query test); all
+    pass.
+  Edge Case Hunter: 0 findings.
+
+  Iteration count: 2 (initial + 1 review pass). Under the directive
+  loopback budget.
+
+Step 5 — Marking story status: done.
+
+  Story: 8-2-add-search-endpoint
+  Diff: src/search/{route,query}.ts (new), tests (new).
+
+Status: done. sprint-status.yaml updated.

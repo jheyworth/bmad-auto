@@ -1,0 +1,2 @@
+CONCERNS
+Reason: partial p1 AC coverage — 3-3 AC-5 (tier-aware upgrade-in-progress) lacks integration test; 3-2 AC-4 (month-boundary quota reset) covered only indirectly; 3-2 AC-7 (retry-after header) covered only by snapshot.

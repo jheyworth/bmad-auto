@@ -1,0 +1,49 @@
+# Hand-crafted sprint-status.yaml for digest dry-render halt-exit scenario.
+# K = 3 in this fixture. The dev-mode launch halted at story 3-3 mid-loop
+# (intent_gap). 3-1 (tracer) and 3-2 reached done before the HALT; 3-3
+# remains in-progress; 3-4 was never started.
+#
+# Epic 4 is still backlog and unblocked by the partial K execution, so the
+# next-backlog-epic lookup in 7.3.4 should still resolve to 4 for the
+# digest's third reminder line.
+
+sprint:
+  id: validate-sprint-1
+  title: bmad-auto validate sprint
+
+epics:
+  3:
+    title: "Inbound rate limiting + onboarding hardening"
+  4:
+    title: "Webhook receiver + idempotency cache"
+  5:
+    title: "Reporting dashboard parity"
+
+development_status:
+  3-1-tracer:
+    title: "Tracer: end-to-end rate-limit path"
+    status: done
+  3-2-add-rate-limiter:
+    title: "Per-tenant quota enforcement at the inbound edge"
+    status: done
+  3-3-burst-window-tiering:
+    title: "Tier-derived burst windows"
+    status: in-progress
+  3-4-tenant-onboarding-form:
+    title: "Tenant onboarding form (tier-aware)"
+    status: ready-for-dev
+  4-1-tracer:
+    title: "Tracer: payments-webhook end-to-end"
+    status: ready-for-dev
+  4-2-webhook-handler:
+    title: "Webhook handler (at-least-once)"
+    status: ready-for-dev
+  4-3-idempotency-cache:
+    title: "Redis-backed idempotency replay-cache"
+    status: ready-for-dev
+  5-1-tracer:
+    title: "Tracer: reporting dashboard skeleton"
+    status: ready-for-dev
+  5-2-aggregations:
+    title: "Aggregations and rollups"
+    status: ready-for-dev

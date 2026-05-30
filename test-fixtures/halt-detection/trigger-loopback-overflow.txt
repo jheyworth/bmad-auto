@@ -1,0 +1,37 @@
+  Iteration 6 — re-running tests after patch from review finding #4...
+
+  > npm test -- --testPathPattern=tenant-scope
+  PASS  src/tenants/__tests__/scope.test.ts
+  FAIL  src/tenants/__tests__/scope-integration.test.ts
+    ● tenant scope > rejects cross-tenant read when caller lacks role
+      expect(response.status).toBe(403)
+      Received: 500
+
+  Review (Blind Hunter) flagged this in iteration 5 already. The patch
+  applied in iteration 6 (route guard reordering) did not address the
+  root cause — the 500 originates from a database error thrown before
+  the guard runs, not from the guard itself. Adversarial review's
+  reasoning in iteration 5 was correct; the patch was wrong.
+
+  Loopback bookkeeping for story 3-5-tenant-scope-enforcement:
+    iteration 1 — initial pass, 3 review findings
+    iteration 2 — patched 2 of 3, edge-case hunter flagged regression
+    iteration 3 — re-patched, blind hunter found new finding
+    iteration 4 — patched, scope-split deferred 1 sub-AC
+    iteration 5 — adversarial-review flagged the 500 vs 403 mismatch
+    iteration 6 — patch applied, test still fails
+
+  More than 5 loopbacks on one story — autonomous-mode directive #4
+  caps story loopback depth at 5 to prevent infinite review-and-patch
+  cycles when the underlying issue is structurally outside the story's
+  scope. The loopback ceiling has been hit.
+
+  Story: 3-5-tenant-scope-enforcement
+  Reason: >5 loopbacks (6 iterations, last 2 unable to converge on the
+    cross-tenant 500-vs-403 finding)
+  Next action for operator: inspect the test transcript and the diff
+    accumulated across iterations 1-6 (still on disk; not reverted).
+    Likely needs a deeper architectural fix (database error mapping)
+    that is out of scope for this story.
+
+Status: HALTED on loopback ceiling.

@@ -1,0 +1,42 @@
+> /bmad-quick-dev story 3-6
+
+Story spec: _bmad-output/implementation-artifacts/3-6-export-pipeline.md
+Status: ready-for-dev. ACs: 3 functional.
+
+Step 1 — Preflight: VCS clean, branch ok (epic-3-auto-dev),
+  no in-flight specs.
+
+Step 2 — Intent reconciliation: ok. ACs map cleanly to the export-
+  pipeline pattern established in epic-3-micro-architecture.md § "Batch
+  export topology".
+
+Step 3 — Implementation
+  Reading existing modules: src/export/pipeline.ts, src/export/sink.ts
+  Drafting changes...
+
+  Encountered an external system the architecture document does not
+  describe: a third-party SFTP destination configured via env var
+  EXPORT_SFTP_URL. Code paths under src/export/sink.ts reference this
+  but no architecture record exists.
+
+  Attempted to derive intent from environmental clues (env-var name,
+  existing function signatures, related tests under src/export/__tests__/
+  for a hypothetical sftp-sink module). Result: ambiguous — at least
+  three plausible implementations exist (direct connection per request,
+  pooled connection cached at module scope, queued connection through a
+  worker).
+
+  Per autonomous-mode directive #6 (when ambiguity cannot be reduced
+  from available artifacts and the cost of a wrong choice is rework
+  rather than a localized fix, HALT and surface), refusing to guess.
+
+HALT
+
+  Story: 3-6-export-pipeline
+  Reason: ambiguous SFTP sink architecture, no source-of-truth doc
+  Next action for operator: extend epic-3-micro-architecture.md with
+    the SFTP sink topology decision (connection-management strategy,
+    error-handling envelope, retry semantics), then re-run
+    /bmad-quick-dev against story 3-6.
+
+Status: HALTED.

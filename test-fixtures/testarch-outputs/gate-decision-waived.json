@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1.0",
+  "evaluated_at": "2026-05-26T21:34:02.671Z",
+  "repo": "forge-rate-limit-service",
+  "target": {
+    "type": "epic",
+    "id": "E7",
+    "label": "Epic 7 — Operator-facing diagnostics CLI"
+  },
+  "collection_status": "COLLECTED",
+  "gate_basis": "none",
+  "gate_status": "WAIVED",
+  "rationale": "Stakeholder-approved waiver applied per docs/waivers/E7-diagnostics-cli.md. Epic 7 ships a read-only operator diagnostics CLI with no production write path; coverage thresholds are waived because the surface is gated behind an internal feature flag and reaches at most three on-call engineers. P1 coverage is 71% (target: 90%) — uncovered cases are verbose-mode formatting variants validated by manual operator review. Re-evaluate at the GA waiver-expiry date 2026-08-01.",
+  "p0_status": "MET",
+  "p1_status": "PARTIAL",
+  "overall_status": "NOT_MET",
+  "critical_open": 0,
+  "links": {
+    "trace_report_path": "_bmad-output/traceability-matrix-E7.md",
+    "trace_report_url": "",
+    "artifact_url": "",
+    "journey_evidence_url": ""
+  }
+}

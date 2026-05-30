@@ -1,0 +1,3 @@
+{
+  "status": "intent_gap",
+  "reason": "AC-2 specifies a debounce-on-trailing-edge for the search input but the existing UI controller in src/ui/search.tsx already implements debounce-on-leading-edge as part of an earlier story. Resolving requires either amending AC-2 to leading-edge (changes UX behavior) or refactoring the controller to support both modes selectable by prop. Quick-dev refuses to auto-resolve — escalating to operator for a spec

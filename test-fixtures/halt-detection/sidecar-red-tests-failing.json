@@ -1,0 +1,13 @@
+{
+  "status": "red_tests_failing",
+  "reason": "ATDD authored 4 red acceptance tests up-front for story 4-3-quota-reset (AC-1 baseline reset, AC-2 grace period, AC-3 boundary race, AC-Ops clock skew tolerance). Quick-dev drove AC-1 and AC-2 to green within iterations 1–3, but AC-3 (boundary race at the 1-second window edge) and AC-Ops (clock-skew tolerance under NTP drift) remained red after iteration 5. AC-3 is flaking 2-in-10 runs on the millisecond boundary; AC-Ops is consistently red because the implementation does not yet account for ±500ms server clock drift. Per the tests-first commitment quick-dev refuses to mark the story done with red acceptance tests outstanding — HALTing for operator inspection of whether to extend the iteration budget, refactor the windowing primitive, or amend AC-3/AC-Ops tolerances.",
+  "iteration": 5,
+  "files_affected": [
+    "src/quota/reset.ts",
+    "src/quota/clock.ts",
+    "tests/acceptance/quota_reset.spec.ts",
+    "tests/acceptance/quota_ops_clock_skew.spec.ts"
+  ],
+  "timestamp": "2026-05-26T17:48:03Z",
+  "storyId": "4-3-quota-reset"
+}

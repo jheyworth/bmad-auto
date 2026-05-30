@@ -1,0 +1,2 @@
+N/A
+Reason: no NFR-touching code in the epic diff — docs-only changes plus a CLI prompt-string refactor. Stage 4.b skipped per SKILL.md ("Skip if no NFR-touching code in the epic diff").

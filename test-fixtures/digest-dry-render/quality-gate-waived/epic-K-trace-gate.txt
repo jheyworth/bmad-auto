@@ -1,0 +1,2 @@
+WAIVED
+Reason: tracer-only coverage acceptable for this internal tool — no external API surface, single-tenant deployment. Waiver author: operator (justin.heyworth@forgemedialab.com), recorded 2026-05-25T13:42:11Z.

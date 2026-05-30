@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1.0",
+  "evaluated_at": "2026-05-26T19:07:44.812Z",
+  "repo": "forge-rate-limit-service",
+  "target": {
+    "type": "epic",
+    "id": "E5",
+    "label": "Epic 5 — Streaming CSV export"
+  },
+  "collection_status": "COLLECTED",
+  "gate_basis": "priority_thresholds",
+  "gate_status": "CONCERNS",
+  "rationale": "P0 coverage is 100% and overall coverage is 84% (minimum: 80%), but P1 coverage is 83% (target: 90%). Stories E5.S2 (paginated query helper) and E5.S4 (memory ceiling enforcement) have integration tests but lack the end-to-end coverage to demonstrate the AC-1 streaming guarantee under load.",
+  "p0_status": "MET",
+  "p1_status": "PARTIAL",
+  "overall_status": "MET",
+  "critical_open": 0,
+  "links": {
+    "trace_report_path": "_bmad-output/traceability-matrix-E5.md",
+    "trace_report_url": "",
+    "artifact_url": "",
+    "journey_evidence_url": ""
+  }
+}

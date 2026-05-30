@@ -1,0 +1,80 @@
+{
+  "$artifact": "gate-decision.json",
+  "$producer": "bmad-testarch-trace",
+  "epic": "3",
+  "epic_title": "Inbound rate limiting + onboarding hardening",
+  "runId": "20260525T130000Z",
+  "evaluated_at": "2026-05-25T14:51:09Z",
+  "decision_mode": "deterministic",
+  "gate_status": "FAIL",
+  "coverage_statistics": {
+    "total_requirements": 17,
+    "fully_covered": 9,
+    "partially_covered": 2,
+    "uncovered": 6,
+    "overall_coverage_pct": 52.9,
+    "priority_breakdown": {
+      "p0": { "total": 6, "fully_covered": 3, "uncovered": 3 },
+      "p1": { "total": 8, "fully_covered": 4, "partially_covered": 2, "uncovered": 2 },
+      "p2": { "total": 3, "fully_covered": 2, "uncovered": 1 }
+    },
+    "by_level": {
+      "e2e": 3,
+      "integration": 4,
+      "unit": 4
+    }
+  },
+  "gap_analysis": {
+    "critical_gaps": [
+      {
+        "requirement": "3-1 AC-2",
+        "summary": "tracer end-to-end rate-limit path: no test exercises the 429 rejection branch — only the happy path is covered",
+        "priority": "p0"
+      },
+      {
+        "requirement": "3-2 AC-1",
+        "summary": "per-tenant quota enforcement: no test asserts cross-tenant isolation (tenant A's quota does not affect tenant B)",
+        "priority": "p0"
+      },
+      {
+        "requirement": "3-2 AC-3",
+        "summary": "per-tenant quota persistence across process restart: no test, only manual verification noted in story",
+        "priority": "p0"
+      }
+    ],
+    "high_gaps": [
+      {
+        "requirement": "3-3 AC-2",
+        "summary": "onboarding form tier selection: validation error states not asserted",
+        "priority": "p1"
+      },
+      {
+        "requirement": "3-3 AC-4",
+        "summary": "onboarding form: server-side enforcement of tier-allowed limits not tested independently of UI",
+        "priority": "p1"
+      }
+    ],
+    "medium_gaps": [],
+    "low_gaps": []
+  },
+  "gate_criteria": {
+    "p0_coverage_required": 100.0,
+    "p0_coverage_actual": 50.0,
+    "p0_coverage_status": "FAIL",
+    "p1_coverage_target": 90.0,
+    "p1_coverage_minimum": 80.0,
+    "p1_coverage_actual": 50.0,
+    "p1_coverage_status": "FAIL",
+    "overall_coverage_minimum": 75.0,
+    "overall_coverage_actual": 52.9,
+    "overall_coverage_status": "FAIL"
+  },
+  "blockers": [
+    "p0 coverage at 50.0% — required 100%. Three p0 ACs (3-1 AC-2, 3-2 AC-1, 3-2 AC-3) have no test evidence.",
+    "Overall coverage 52.9% — below the 75% minimum."
+  ],
+  "recommendations": [
+    "BLOCK merge. Author tests for the three uncovered p0 ACs before re-running quality gates.",
+    "Operator must escalate: this is a tests-first violation — the tracer story should have driven these tests before downstream stories began."
+  ]
+}

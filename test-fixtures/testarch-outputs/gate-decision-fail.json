@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1.0",
+  "evaluated_at": "2026-05-26T20:13:55.094Z",
+  "repo": "forge-rate-limit-service",
+  "target": {
+    "type": "epic",
+    "id": "E4",
+    "label": "Epic 4 — Quota reset + clock-skew tolerance"
+  },
+  "collection_status": "COLLECTED",
+  "gate_basis": "priority_thresholds",
+  "gate_status": "FAIL",
+  "rationale": "P0 coverage is 67% (required: 100%). 3 critical requirements uncovered: E4.S1/AC-2 (UTC boundary rollover atomicity), E4.S3/AC-3 (clock-skew tolerance window ±90s), and E4.S5/AC-1 (quota-reset replay safety). Tests authored by ATDD remain red at iteration-budget exhaustion; the boundary-race scenario in E4.S3 never reached green.",
+  "p0_status": "NOT_MET",
+  "p1_status": "PARTIAL",
+  "overall_status": "NOT_MET",
+  "critical_open": 3,
+  "links": {
+    "trace_report_path": "_bmad-output/traceability-matrix-E4.md",
+    "trace_report_url": "",
+    "artifact_url": "",
+    "journey_evidence_url": ""
+  }
+}

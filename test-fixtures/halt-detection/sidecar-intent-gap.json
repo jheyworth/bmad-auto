@@ -1,0 +1,13 @@
+{
+  "status": "intent_gap",
+  "reason": "AC-3 of story K-3-tiered-window specifies a tiered rate-limit window (1-minute / 5-minute / 1-hour buckets with cascading thresholds), but the implementation plan derived from the existing rate-limiter architecture in src/rate_limit/window.ts assumes a single flat window. Resolving this requires either amending AC-3 to a flat window (changes product behavior) or extending the window primitive to support tiered buckets (changes architecture). Quick-dev refuses to auto-resolve per directive #2 — escalating to operator for a spec amend or arch decision before continuing.",
+  "iteration": 2,
+  "files_affected": [
+    "src/rate_limit/window.ts",
+    "src/rate_limit/policy.ts",
+    "tests/rate_limit/window.spec.ts",
+    "docs/stories/K-3-tiered-window.md"
+  ],
+  "timestamp": "2026-05-26T14:32:11Z",
+  "storyId": "K-3-tiered-window"
+}

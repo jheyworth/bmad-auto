@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1.0",
+  "evaluated_at": "2026-05-26T18:42:11.358Z",
+  "repo": "forge-rate-limit-service",
+  "target": {
+    "type": "epic",
+    "id": "E2",
+    "label": "Epic 2 — Tiered rate-limit windowing"
+  },
+  "collection_status": "COLLECTED",
+  "gate_basis": "priority_thresholds",
+  "gate_status": "PASS",
+  "rationale": "P0 coverage is 100%, P1 coverage is 93% (target: 90%), and overall coverage is 88% (mini

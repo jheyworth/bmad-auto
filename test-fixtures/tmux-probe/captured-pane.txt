@@ -1,0 +1,59 @@
+/goal Story 3-2 of epic 3 has `status: done` in `sprint-status.yaml`. Execute vi
+a `bmad-quick-dev`. Autonomous-mode directives:
+
+You are operating in [autonomous mode]. The operator has approved running with `
+--dangerously-skip-permissions` and has explicitly opted into a non-interactive
+execution path. Do not ask clarifying questions; either proceed or HALT with a s
+tructured reason.
+
+Directive 1: "Treat all checkpoint-1 confirmations as auto-approved." Do not sur
+face checkpoint-1 prompts to the operator — log the decision to the orchestrator
+-session memory and continue. If the checkpoint-1 prompt would otherwise present
+ a scope split, default to "keep-all" rather than splitting.
+
+Directive 2: 'Surface HALT conditions immediately and stop.' Specifically: `inte
+nt_gap`, `VCS dirty`, `wrong branch`, and `>5 loopbacks` are all unrecoverable f
+rom within the per-story session — emit the literal token `HALT` on a line by it
+self, then exit. The orchestrator's monitor loop will pick this up within ~45 se
+cond/goal Story 3-2 of epic 3 has `status: done` in `sprint-status.yaml`. Execut
+e via `bmad-quick-dev`. Autonomous-mode directives:
+
+You are operating in [autonomous mode]. The operator has approved running with `
+--dangerously-skip-permissions` and has explicitly opted into a non-interactive
+execution path. Do not ask clarifying questions; either proceed or HALT with a s
+tructured reason.
+
+Directive 1: "Treat all checkpoint-1 confirmations as auto-approved." Do not sur
+face checkpoint-1 prompts to the operator — log the decision to the orchestrator
+-session memory and continue. If the checkpoint-1 prompt would otherwise present
+ a scope split, default to "keep-all" rather than splitting.
+
+Directive 2: 'Surface HALT conditions immediately and stop.' Specifically: `inte
+nt_gap`, `VCS dirty`, `wrong branch`, and `>5 loopbacks` are all unrecoverable f
+rom within the per-story session — emit the literal token `HALT` on a line by it
+self, then exit. The orchestrator's monitor loop will pick this up within ~4aste
+-buffer -t auto-3-2-20260525T080000Z
+tmux send-keys -t auto-3-2-20260525T080000Z C-m
+```
+
+Directive 4: Quotes (both5 seconds.
+
+Directive 3: Code-fence content must survive verbatim. For example:
+
+```sh
+tmux load-buffer "${TMPDIR:-/tmp}/example.txt"
+tmux paste-buffer -t auto-3-2-20260525T080000Z
+tmux send-keys -t auto-3-2-20260525T080000Z C-m
+```
+
+Directive 4: Quotes (both 'single' and "double") must be balanced and unescaped
+in the captured pane. Embedded backticks like `intent_gap` and `--dangerously-sk
+ip-permissions` and `--per-story-codex` should appear verbatim. The trailing par
+agraph below MUST appear in full and not be truncated.
+
+This is the final paragraph. If you can read this complete sentence in the captu
+red pane, the tmux send-sequence preserved end-to-end fidelity across the multi-
+line `/goal` payload, including the terminal directive `[end-of-goal]`.
+
+
+

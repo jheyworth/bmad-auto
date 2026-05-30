@@ -1,0 +1,8 @@
+{
+  "status": "bad_spec",
+  "reason": "Story 5-2-export-csv spec is internally inconsistent: AC-1 requires the export to stream rows incrementally (no full buffering, memory ceiling 50MB) while AC-4 requires the export to be sorted by created_at ascending across the entire result set. A streaming export cannot guarantee a global sort without buffering. Additionally the spec's 'Implementation notes' section references an upstream `paginated_query()` helper that does not exist in src/db/ (grep returned zero hits). Quick-dev cannot proceed — the spec needs an operator amend to reconcile AC-1 vs AC-4 (drop streaming OR drop global sort OR add explicit pre-sort step) and to either add the missing helper or revise the implementation note.",
+  "iteration": null,
+  "files_affected": [],
+  "timestamp": "2026-05-26T09:14:47Z",
+  "storyId": "5-2-export-csv"
+}

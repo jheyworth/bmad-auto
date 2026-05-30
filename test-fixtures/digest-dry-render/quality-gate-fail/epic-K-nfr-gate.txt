@@ -1,0 +1,2 @@
+FAIL
+Reason: rate-limiter p99 latency 142ms exceeds 80ms budget under burst load
